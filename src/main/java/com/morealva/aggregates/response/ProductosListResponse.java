@@ -12,5 +12,4 @@ public class ProductosListResponse {
     private String principio;
     private String indicacion;
     private String patologia;
-
 }
