@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -26,8 +28,8 @@ public class Producto {
     @JoinColumn(name = "id_laboratorio", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCTO_LABORATORIO"))
     private Laboratorio laboratorio;
 
-    @Column(nullable = false, length = 10)
-    private String codigo;
+    @Column(nullable = false)
+    private Integer idCodigo;
 
     @Column(nullable = false, length = 150)
     private String nombre;
@@ -35,13 +37,14 @@ public class Producto {
     @Column(nullable = false, length = 250)
     private String indicacion;
 
-    @Column(nullable = false, length = 150)
-    private String presentacion;
+    @Column(nullable = false)
+    private LocalDateTime fechaCreacion;
 
+    @Column(nullable = false, length = 250)
+    private String patologia;
 
-    private Double pvf;
-
-    private Double pvp;
+    @Column(nullable = false, length = 1)
+    private String estado_pagina;
 
     @Column(nullable = false)
     private Boolean estado;

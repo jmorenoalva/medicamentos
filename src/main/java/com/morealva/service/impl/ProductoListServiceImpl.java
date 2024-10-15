@@ -25,9 +25,9 @@ public class ProductoListServiceImpl implements IProductoListService {
         ProductoListDTOResponse productoListDTOResponse = farmapreciosAll.busquedaProductos(request);
 
         productoListDTOResponse.getProductos().forEach(productoListDTO -> {
-
             ProductoDTOResponse productoDTOResponse = farmapreciosProductos.buscarProductoPorId(productoListDTO.getId());
             System.out.println(productoDTOResponse);
+
         });
 
         return null;
