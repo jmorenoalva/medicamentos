@@ -5,5 +5,5 @@ import com.morealva.aggregates.response.ProductoListDTOResponse;
 
 public interface IProductoListService {
 
-    ProductoListDTOResponse getListaProductos(ProductosListRequest request);
+    ProductoListDTOResponse getListaProductosFarmaprecios(ProductosListRequest request);
 }

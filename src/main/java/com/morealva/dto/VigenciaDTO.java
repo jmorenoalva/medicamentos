@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,7 +26,7 @@ public class VigenciaDTO {
     private String mes;
 
     @NotNull
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     @NotNull
     private Boolean estado;

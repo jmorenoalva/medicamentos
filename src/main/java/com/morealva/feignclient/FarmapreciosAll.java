@@ -10,5 +10,4 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface FarmapreciosAll {
     @PostMapping(value = "/busquedaWhere", consumes = "application/json", produces = "application/json")
     ProductoListDTOResponse busquedaProductos (@RequestBody ProductosListRequest productosListRequest);
-
 }
