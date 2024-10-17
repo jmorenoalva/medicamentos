@@ -19,12 +19,12 @@ public class ProductoDTOResponse {
     private String Laboratorio;
     private String principio;
     private String indicacion;
-    private LocalDateTime fechaCreacion;
-    private String fechaActualizacion;
+    private String fecha_creacion;
+    private String fecha_actualizacion;
     private String estado;
     private String esnuevo;
     private String modificacion;
     private String patologia;
     private String id_patologia;
-    List<ProductoPresentacionResponseDTO> presentaciones;
+    List<ProductoPresentacionResponseDTO> presentacion;
 }

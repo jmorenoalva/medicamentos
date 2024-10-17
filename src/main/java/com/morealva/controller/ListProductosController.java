@@ -16,6 +16,6 @@ public class ListProductosController {
     @PostMapping("/farmaprecios")
     public ProductoListDTOResponse getListProductos(@RequestBody ProductosListRequest productosListRequest) {
 
-        return productoListService.getListaProductos(productosListRequest);
+        return productoListService.getListaProductosFarmaprecios(productosListRequest);
     }
 }

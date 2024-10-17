@@ -55,5 +55,5 @@ public class PaginaController {
 
         return ResponseEntity.noContent().build();
     }
-    
+
 }

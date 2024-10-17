@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ProductoDTO {
     @NotNull
     @NotBlank
     @NotEmpty
-    private LocalDateTime fechaCreacion;
+    private LocalDate fechaCreacion;
 
 
     private String patologia;

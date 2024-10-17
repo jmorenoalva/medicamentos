@@ -31,7 +31,7 @@ public class VigenciaServiceImpl extends CRUDImpl<Vigencia, Integer> implements 
 
         Vigencia vigencia = new Vigencia();
         vigencia.setAnio(date.getYear());
-        vigencia.setMes(String.valueOf(date.getMonthValue()));
+        vigencia.setMes(String.format("%02d",date.getMonthValue()));
         vigencia.setFecha(date);
         vigencia.setPagina(pagina);
         vigencia.setEstado(true);
