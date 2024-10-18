@@ -17,6 +17,7 @@ public class VigenciaServiceImpl extends CRUDImpl<Vigencia, Integer> implements 
 
     private final IVigenciaRepo repo;
     private final IPaginaRepo paginaRepo;
+    private final IVigenciaRepo vigenciaRepo;
 
     @Override
     protected IGenericRepo<Vigencia, Integer> getRepo() {
@@ -29,14 +30,21 @@ public class VigenciaServiceImpl extends CRUDImpl<Vigencia, Integer> implements 
 
         Pagina pagina=paginaRepo.findByCodigo(codigoPagina);
 
+        Vigencia vigenciaExistente = vigenciaRepo.findByPaginaAndFecha(pagina, date);
         Vigencia vigencia = new Vigencia();
-        vigencia.setAnio(date.getYear());
-        vigencia.setMes(String.format("%02d",date.getMonthValue()));
-        vigencia.setFecha(date);
-        vigencia.setPagina(pagina);
-        vigencia.setEstado(true);
 
-        repo.save(vigencia);
+        if(vigenciaExistente == null) {
+
+            vigencia.setAnio(date.getYear());
+            vigencia.setMes(String.format("%02d",date.getMonthValue()));
+            vigencia.setFecha(date);
+            vigencia.setPagina(pagina);
+            vigencia.setEstado(true);
+
+            repo.save(vigencia);
+        }
+        vigencia = vigenciaExistente;
+
 
         return vigencia;
     }

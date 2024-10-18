@@ -6,4 +6,5 @@ public interface IVigenciaService extends ICRUD<Vigencia, Integer>{
 
 
     Vigencia createVigenciaAutomatico(String codigoPagina);
+
 }

@@ -36,7 +36,7 @@ public class Presentacion {
 
     private Double pvp;
 
-    @Column(nullable = false, length = 250)
+    @Column(length = 250)
     private String modificaciones;
 
     @Column(nullable = false)

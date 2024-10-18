@@ -36,13 +36,13 @@ public class Producto {
     @Column(nullable = false, length = 150)
     private String nombre;
 
-    @Column(nullable = false, length = 250)
+    @Column(length = 250)
     private String indicacion;
 
     @Column(nullable = false)
     private LocalDate fechaCreacion;
 
-    @Column(nullable = false, length = 250)
+    @Column(length = 250)
     private String patologia;
 
     @Column(nullable = false, length = 1)
