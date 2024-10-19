@@ -42,11 +42,13 @@ public class VigenciaServiceImpl extends CRUDImpl<Vigencia, Integer> implements 
             vigencia.setEstado(true);
 
             repo.save(vigencia);
+            return vigencia;
+        }else {
+            //vigencia = vigenciaExistente;
+
+
+            return vigenciaExistente;
         }
-        vigencia = vigenciaExistente;
-
-
-        return vigencia;
     }
 
 }

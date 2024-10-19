@@ -2,21 +2,18 @@ package com.morealva.service.impl;
 
 import com.morealva.aggregates.response.ProductoDTOResponse;
 import com.morealva.dto.ProductoDTO;
-import com.morealva.modelo.Laboratorio;
-import com.morealva.modelo.Presentacion;
-import com.morealva.modelo.Producto;
-import com.morealva.modelo.Vigencia;
-import com.morealva.repository.IGenericRepo;
-import com.morealva.repository.ILaboratorioRepo;
-import com.morealva.repository.IPresentacionRepo;
-import com.morealva.repository.IProductoRepo;
+import com.morealva.modelo.*;
+import com.morealva.repository.*;
 import com.morealva.service.IProductoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +23,15 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
     private final ILaboratorioRepo laboratorioRepo;
     private final IProductoRepo productoRepo;
     private final IPresentacionRepo presentacionRepo;
+    private final IPrincipioActivoRepo principioActivoRepo;
+    private final IProductoPrincipioActivoRepo productoPrincipioActivoRepo;
 
     @Override
     protected IGenericRepo<Producto, Integer> getRepo() {
         return repo;
     }
 
+    @Transactional
     @Override
     public Producto createProductoAutomatico(ProductoDTOResponse productoDTOResponse, Vigencia vigencia){
 
@@ -58,7 +58,7 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         producto.setFechaCreacion(fechaCreacion);
         producto.setPatologia(productoDTOResponse.getPatologia());
         producto.setEstado_pagina(productoDTOResponse.getEstado());
-        producto.setPatologia();
+
         producto.setEstado(true);
 
         productoRepo.save(producto);
@@ -77,6 +77,19 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
             presentacion.setEstado(true);
 
             presentacionRepo.save(presentacion);
+
+        });
+
+
+        String principios = productoDTOResponse.getPrincipio().trim();
+        List<String> listPrincipios = Arrays.asList(principios.split("\\+"));
+        listPrincipios.forEach(principio -> {
+            PrincipioActivo principioActivo = new PrincipioActivo();
+            principioActivo.setNombre(principio.trim());
+            principioActivo.setEstado(true);
+            principioActivoRepo.save(principioActivo);
+
+            productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), principioActivo.getIdPrincipio());
 
         });
 
