@@ -16,6 +16,6 @@ public interface IProductoPrincipioActivoRepo extends IGenericRepo<ProductoPrinc
     Integer savePrincipioActivo(@Param("idProducto") Integer idProducto, @Param("idPrincipioActivo") Integer idPrincipio);
 
     @Query("SELECT pp.principioActivo FROM ProductoPrincipioActivo pp WHERE pp.producto.idProducto=:idProducto")
-    List<PrincipioActivo> getPrincipioActivoByProductId(@Param("idProducto") Integer id);
+    List<PrincipioActivo> getPrincipioActivosByProductoId(@Param("idProducto") Integer id);
 
 }

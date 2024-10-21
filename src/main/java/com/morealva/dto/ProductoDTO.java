@@ -52,5 +52,5 @@ public class ProductoDTO {
 
     @NotNull
     @JsonManagedReference
-    private List<Presentacion> presentaciones;
+    private List<PresentacionDTO> presentaciones;
 }
