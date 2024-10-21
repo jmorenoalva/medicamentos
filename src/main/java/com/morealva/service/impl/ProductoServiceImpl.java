@@ -35,12 +35,12 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
     @Override
     public Producto createProductoAutomatico(ProductoDTOResponse productoDTOResponse, Vigencia vigencia){
 
-        Laboratorio laboratorio = laboratorioRepo.findByNombre(String.valueOf(productoDTOResponse.getLaboratorio()));
+        Laboratorio laboratorio = laboratorioRepo.findByNombre(String.valueOf(productoDTOResponse.getLaboratorio()).trim());
 
         if(laboratorio == null){
             laboratorio = new Laboratorio();
-            laboratorio.setNombre(String.valueOf(productoDTOResponse.getLaboratorio()));
-            laboratorio.setAlias(String.valueOf(productoDTOResponse.getLaboratorio()));
+            laboratorio.setNombre(String.valueOf(productoDTOResponse.getLaboratorio()).trim());
+            laboratorio.setAlias(String.valueOf(productoDTOResponse.getLaboratorio()).trim());
             laboratorio.setEstado(true);
             laboratorioRepo.save(laboratorio);
         }
@@ -53,10 +53,10 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         producto.setIdCodigo(productoDTOResponse.getId());
         producto.setVigencia(vigencia);
         producto.setLaboratorio(laboratorio);
-        producto.setNombre(productoDTOResponse.getNombre());
-        producto.setIndicacion(productoDTOResponse.getIndicacion());
+        producto.setNombre(String.valueOf(productoDTOResponse.getNombre()).trim());
+        producto.setIndicacion(String.valueOf(productoDTOResponse.getIndicacion()).trim());
         producto.setFechaCreacion(fechaCreacion);
-        producto.setPatologia(productoDTOResponse.getPatologia());
+        producto.setPatologia(String.valueOf(productoDTOResponse.getPatologia()).trim());
         producto.setEstado_pagina(productoDTOResponse.getEstado());
 
         producto.setEstado(true);
@@ -70,10 +70,10 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
             presentacion.setIdCodigo(ProductoPresentacionResponseDTO.getId());
             presentacion.setProducto(producto);
             presentacion.setIdCodProd(productoDTOResponse.getId());
-            presentacion.setNombre(ProductoPresentacionResponseDTO.getNombre());
+            presentacion.setNombre(String.valueOf(ProductoPresentacionResponseDTO.getNombre()).trim());
             presentacion.setPvf(ProductoPresentacionResponseDTO.getPvf());
             presentacion.setPvp(ProductoPresentacionResponseDTO.getPvp());
-            presentacion.setModificaciones(ProductoPresentacionResponseDTO.getModificaciones());
+            presentacion.setModificaciones(String.valueOf(ProductoPresentacionResponseDTO.getModificaciones()).trim());
             presentacion.setEstado(true);
 
             presentacionRepo.save(presentacion);
@@ -81,17 +81,35 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         });
 
 
-        String principios = productoDTOResponse.getPrincipio().trim();
-        List<String> listPrincipios = Arrays.asList(principios.split("\\+"));
-        listPrincipios.forEach(principio -> {
-            PrincipioActivo principioActivo = new PrincipioActivo();
-            principioActivo.setNombre(principio.trim());
-            principioActivo.setEstado(true);
-            principioActivoRepo.save(principioActivo);
+        String principios = productoDTOResponse.getPrincipio();
+        if (principios != null && !principios.trim().isEmpty()) {
 
-            productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), principioActivo.getIdPrincipio());
+            List<String> listPrincipios;
+            if(principios.contains("+")){
+                listPrincipios = Arrays.asList(principios.split("\\+"));
+            }else{
+                listPrincipios = Arrays.asList(principios.split(","));
+            }
+            listPrincipios.forEach(principio -> {
 
-        });
+                PrincipioActivo principioActivoExistente = principioActivoRepo.findByNombre(String.valueOf(principio).trim());
+
+                if (principioActivoExistente == null) {
+                    PrincipioActivo principioActivo = new PrincipioActivo();
+                    principioActivo.setNombre(String.valueOf(principio).trim());
+                    principioActivo.setEstado(true);
+                    principioActivoRepo.save(principioActivo);
+                    principioActivoExistente = principioActivo;
+                }
+
+
+                productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), principioActivoExistente.getIdPrincipio());
+
+            });
+        }
+
+
+
 
         return producto;
     }

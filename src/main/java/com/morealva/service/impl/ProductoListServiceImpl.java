@@ -58,7 +58,7 @@ public class ProductoListServiceImpl implements IProductoListService {
                     ProductoDTOResponse productoDTOResponse = farmapreciosProductos.buscarProductoPorId(productoListDTO.getId());
 
                     //productoService.save(mapperUtil.map(productoDTOResponse, Producto.class));
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                     productoService.createProductoAutomatico(productoDTOResponse, vigencia);
                     System.out.println(productoDTOResponse);
 
