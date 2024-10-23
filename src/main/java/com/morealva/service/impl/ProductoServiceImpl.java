@@ -92,18 +92,21 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
             }
             listPrincipios.forEach(principio -> {
 
-                PrincipioActivo principioActivoExistente = principioActivoRepo.findByNombre(String.valueOf(principio).trim());
+                if (principio != null && !principio.trim().isEmpty()) {
+                    PrincipioActivo principioActivoExistente = principioActivoRepo.findByNombre(String.valueOf(principio).trim());
 
-                if (principioActivoExistente == null) {
-                    PrincipioActivo principioActivo = new PrincipioActivo();
-                    principioActivo.setNombre(String.valueOf(principio).trim());
-                    principioActivo.setEstado(true);
-                    principioActivoRepo.save(principioActivo);
-                    principioActivoExistente = principioActivo;
+                    if (principioActivoExistente == null) {
+                        PrincipioActivo principioActivo = new PrincipioActivo();
+                        principioActivo.setNombre(String.valueOf(principio).trim());
+                        principioActivo.setEstado(true);
+                        principioActivoRepo.save(principioActivo);
+                        principioActivoExistente = principioActivo;
+                    }
+
+                    if(productoPrincipioActivoRepo.findByProductoIdAndPrincipioActivoId(producto.getIdProducto(), principioActivoExistente.getIdPrincipio()) == null) {
+                        productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), principioActivoExistente.getIdPrincipio());
+                    }
                 }
-
-
-                productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), principioActivoExistente.getIdPrincipio());
 
             });
         }

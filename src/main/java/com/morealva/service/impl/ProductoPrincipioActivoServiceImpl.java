@@ -1,6 +1,7 @@
 package com.morealva.service.impl;
 
 import com.morealva.modelo.PrincipioActivo;
+import com.morealva.modelo.ProductoPrincipioActivo;
 import com.morealva.repository.IProductoPrincipioActivoRepo;
 import com.morealva.service.IProductoPrincipioActivoService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,10 @@ public class ProductoPrincipioActivoServiceImpl implements IProductoPrincipioAct
     @Override
     public List<PrincipioActivo> getPrincipioActivosByProductoId(Integer id) {
         return productoPrincipioActivoRepo.getPrincipioActivosByProductoId(id);
+    }
+
+    @Override
+    public ProductoPrincipioActivo getProductoByIdAndPrincipioActivoById(Integer productoId, Integer principioActivoId) {
+        return productoPrincipioActivoRepo.findByProductoIdAndPrincipioActivoId(productoId, principioActivoId);
     }
 }

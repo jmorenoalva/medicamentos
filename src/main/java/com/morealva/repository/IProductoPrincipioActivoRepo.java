@@ -18,4 +18,6 @@ public interface IProductoPrincipioActivoRepo extends IGenericRepo<ProductoPrinc
     @Query("SELECT pp.principioActivo FROM ProductoPrincipioActivo pp WHERE pp.producto.idProducto=:idProducto")
     List<PrincipioActivo> getPrincipioActivosByProductoId(@Param("idProducto") Integer id);
 
+    @Query("SELECT pp.principioActivo FROM ProductoPrincipioActivo pp WHERE pp.producto.idProducto=:idProducto AND pp.principioActivo.idPrincipio=:idPrincipio")
+    ProductoPrincipioActivo findByProductoIdAndPrincipioActivoId(@Param("idProducto") Integer idProducto, @Param("idPrincipio") Integer idPrincipio);
 }
