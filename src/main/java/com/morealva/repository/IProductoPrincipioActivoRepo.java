@@ -1,6 +1,7 @@
 package com.morealva.repository;
 
 import com.morealva.modelo.PrincipioActivo;
+import com.morealva.modelo.Producto;
 import com.morealva.modelo.ProductoPrincipioActivo;
 import com.morealva.modelo.ProductoPrincipioActivoPK;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,4 +21,8 @@ public interface IProductoPrincipioActivoRepo extends IGenericRepo<ProductoPrinc
 
     @Query("SELECT pp.principioActivo FROM ProductoPrincipioActivo pp WHERE pp.producto.idProducto=:idProducto AND pp.principioActivo.idPrincipio=:idPrincipio")
     ProductoPrincipioActivo findByProductoIdAndPrincipioActivoId(@Param("idProducto") Integer idProducto, @Param("idPrincipio") Integer idPrincipio);
+
+    @Query("SELECT pp.producto FROM ProductoPrincipioActivo pp WHERE pp.principioActivo.idPrincipio=:idPrincipio")
+    List<Producto> getProductoAndPrincipioActivoId(@Param("idPrincipio") Integer idPrincipio);
+
 }
