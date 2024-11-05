@@ -16,8 +16,10 @@ public class VigenciaDTO {
 
     private Integer idVigencia;
 
-    @JsonBackReference
-    private PaginaDTO pagina;
+//    @JsonBackReference
+//    private PaginaDTO pagina;
+    @NotNull
+    private Integer idPagina;
 
     @NotNull
     private Integer anio;
