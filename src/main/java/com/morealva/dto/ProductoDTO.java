@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class §ProductoDTO {
+public class ProductoDTO {
 
     private Integer idProducto;
 
