@@ -16,15 +16,18 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductoDTO {
+public class §ProductoDTO {
 
     private Integer idProducto;
 
     @NotNull
-    private VigenciaDTO vigencia;
+    private Integer idVigencia;
+//    private VigenciaDTO vigencia;
 
     @NotNull
-    private LaboratorioDTO laboratorio;
+    private Integer idLaboratorio;
+//    private LaboratorioDTO laboratorio;
+
 
     @NotNull
     private Integer idCodigo;
