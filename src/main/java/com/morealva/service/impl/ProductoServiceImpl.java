@@ -116,4 +116,14 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
 
         return producto;
     }
+
+    @Override
+    public Producto saveTransactional(Producto producto, List<PrincipioActivo> principio){
+        if (producto.getIdProducto() != null) {
+            productoPrincipioActivoRepo.deletePrincipioActivo(producto.getIdProducto());
+        }
+        productoRepo.save(producto);
+        principio.forEach(ex -> productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), ex.getIdPrincipio()));
+        return producto;
+    }
 }

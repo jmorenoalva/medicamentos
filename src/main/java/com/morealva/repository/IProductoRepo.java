@@ -5,6 +5,6 @@ import com.morealva.modelo.Vigencia;
 
 public interface IProductoRepo extends IGenericRepo<Producto, Integer>{
 
-
     Producto findByIdCodigoAndVigencia(Integer codigo, Vigencia vigencia);
+
 }
