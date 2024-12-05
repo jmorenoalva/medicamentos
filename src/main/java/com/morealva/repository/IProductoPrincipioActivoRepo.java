@@ -14,7 +14,7 @@ public interface IProductoPrincipioActivoRepo extends IGenericRepo<ProductoPrinc
 
     @Modifying
     @Query(value = "INSERT INTO producto_principio_activo (id_producto, id_principio_activo) VALUES (:idProducto, :idPrincipioActivo)", nativeQuery = true)
-    Integer savePrincipioActivo(@Param("idProducto") Integer idProducto, @Param("idPrincipioActivo") Integer idPrincipio);
+    Integer savePrincipioActivo(@Param("idProducto") Integer idProducto, @Param("idPrincipioActivo") Integer idPrincipioActivo);
 
     @Modifying
     @Query(value = "DELETE FROM producto_principio_activo WHERE id_producto = :idProducto", nativeQuery = true)
