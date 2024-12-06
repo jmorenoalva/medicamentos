@@ -38,8 +38,20 @@ public class ProductoController {
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody ProductoListPrincipioActivoDTO dto) {
         Producto obj = productoService.saveTransactional(mapperUtil.map(dto.getProducto(), Producto.class), mapperUtil.mapList(dto.getListPrincipioActivo(), PrincipioActivo.class));
-        URI locatioin = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdProducto()).toUri();
-        return ResponseEntity.created(locatioin).build();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdProducto()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoListPrincipioActivoDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody ProductoListPrincipioActivoDTO dto) {
+        Producto obj = productoService.updateTransactional(id, mapperUtil.map(dto.getProducto(), Producto.class), mapperUtil.mapList(dto.getListPrincipioActivo(), PrincipioActivo.class));
+        return ResponseEntity.ok(mapperUtil.map(obj, ProductoListPrincipioActivoDTO.class));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
+        productoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

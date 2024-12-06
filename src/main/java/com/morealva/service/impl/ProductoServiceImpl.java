@@ -14,21 +14,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements IProductoService {
 
-    private final IProductoRepo repo;
+//    private final IProductoRepo repo;
     private final ILaboratorioRepo laboratorioRepo;
     private final IProductoRepo productoRepo;
     private final IPresentacionRepo presentacionRepo;
     private final IPrincipioActivoRepo principioActivoRepo;
     private final IProductoPrincipioActivoRepo productoPrincipioActivoRepo;
+//    private final IProductoService productoService;
 
     @Override
     protected IGenericRepo<Producto, Integer> getRepo() {
-        return repo;
+        return productoRepo;
     }
 
     @Transactional
@@ -120,11 +124,64 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
     @Transactional
     @Override
     public Producto saveTransactional(Producto producto, List<PrincipioActivo> principios){
-        if (producto.getIdProducto() != null && producto.getIdProducto()>0) {
-            productoPrincipioActivoRepo.deletePrincipioActivo(producto.getIdProducto());
-        }
         productoRepo.save(producto);
         principios.forEach(ex -> productoPrincipioActivoRepo.savePrincipioActivo(producto.getIdProducto(), ex.getIdPrincipio()));
         return producto;
+    }
+
+    @Transactional
+    @Override
+    public Producto updateTransactional(Integer idProducto, Producto producto, List<PrincipioActivo> principios){
+        productoPrincipioActivoRepo.deletePrincipioActivo(idProducto);
+
+        Producto productoEncontrado = productoRepo.findById(idProducto).orElse(null);
+
+        //falta vigencia y laboratorio
+        productoEncontrado.setIdCodigo(producto.getIdCodigo());
+        productoEncontrado.setNombre(producto.getNombre());
+        productoEncontrado.setIndicacion(producto.getIndicacion());
+        productoEncontrado.setFechaCreacion(producto.getFechaCreacion());
+        productoEncontrado.setPatologia(producto.getPatologia());
+        productoEncontrado.setEstado_pagina(producto.getEstado_pagina());
+        productoEncontrado.setEstado(producto.getEstado());
+        actualizarPresentaciones(productoEncontrado, producto.getPresentaciones());
+
+        productoRepo.save(productoEncontrado);
+
+
+
+        principios.forEach(ex -> productoPrincipioActivoRepo.savePrincipioActivo(idProducto, ex.getIdPrincipio()));
+        return producto;
+    }
+
+    private void actualizarPresentaciones(Producto productoExistente, List<Presentacion> presentacionesActualizadas){
+        Map<Integer, Presentacion> presentacionesExistentes = productoExistente.getPresentaciones().stream()
+                .collect(Collectors.toMap(Presentacion::getIdPresentacion, p -> p));
+
+        for(Presentacion presentacion : presentacionesActualizadas){
+            if (presentacion.getIdPresentacion() == null) {
+                presentacion.setProducto(productoExistente);
+                productoExistente.getPresentaciones().add(presentacion);
+            }else{
+                Presentacion presentacionExistente = presentacionesExistentes.get(presentacion.getIdPresentacion());
+                presentacionExistente.setIdCodigo(presentacion.getIdCodigo());
+                presentacionExistente.setIdCodProd(presentacion.getIdCodProd());
+                presentacionExistente.setNombre(presentacion.getNombre());
+                presentacionExistente.setPvf(presentacion.getPvf());
+                presentacionExistente.setPvp(presentacion.getPvp());
+                presentacionExistente.setModificaciones(presentacion.getModificaciones());
+                presentacionExistente.setEstado(presentacion.getEstado());
+            }
+        }
+
+        productoExistente.getPresentaciones().removeIf( p ->
+                !presentacionesActualizadas.stream()
+                        .map(Presentacion::getIdPresentacion)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet())
+                        .contains(p.getIdPresentacion())
+
+        );
+
     }
 }

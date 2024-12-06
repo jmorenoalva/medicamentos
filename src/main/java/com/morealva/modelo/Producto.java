@@ -30,7 +30,7 @@ public class Producto {
     @JoinColumn(name = "id_laboratorio", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCTO_LABORATORIO"))
     private Laboratorio laboratorio;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer idCodigo;
 
     @Column(nullable = false, length = 150)

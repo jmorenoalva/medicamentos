@@ -14,4 +14,6 @@ public interface IProductoService extends ICRUD<Producto, Integer> {
     Producto createProductoAutomatico(ProductoDTOResponse productoDtoResponse, Vigencia vigencia);
 
     Producto saveTransactional(Producto producto, List<PrincipioActivo> principio);
+
+    Producto updateTransactional(Integer id, Producto producto, List<PrincipioActivo> principio);
 }

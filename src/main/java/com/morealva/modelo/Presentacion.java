@@ -18,14 +18,14 @@ public class Presentacion {
     @EqualsAndHashCode.Include
     private Integer idPresentacion;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer idCodigo;
 
     @ManyToOne
     @JoinColumn(name="id_producto", nullable = false, foreignKey = @ForeignKey(name="FK_PRESENTACION_PRODUCTO"))
     private Producto producto;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer idCodProd;
 
     @Column(nullable = false, length = 150)
