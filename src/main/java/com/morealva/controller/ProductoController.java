@@ -43,14 +43,14 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoListPrincipioActivoDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody ProductoListPrincipioActivoDTO dto) {
+    public ResponseEntity<ProductoDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody ProductoListPrincipioActivoDTO dto) {
         Producto obj = productoService.updateTransactional(id, mapperUtil.map(dto.getProducto(), Producto.class), mapperUtil.mapList(dto.getListPrincipioActivo(), PrincipioActivo.class));
-        return ResponseEntity.ok(mapperUtil.map(obj, ProductoListPrincipioActivoDTO.class));
+        return ResponseEntity.ok(mapperUtil.map(obj, ProductoDTO.class));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
-        productoService.delete(id);
+        productoService.deleteTransactional(id);
         return ResponseEntity.noContent().build();
     }
 

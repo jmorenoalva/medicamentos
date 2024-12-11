@@ -28,6 +28,7 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
     private final IPresentacionRepo presentacionRepo;
     private final IPrincipioActivoRepo principioActivoRepo;
     private final IProductoPrincipioActivoRepo productoPrincipioActivoRepo;
+    private final IVigenciaRepo vigenciaRepo;
 //    private final IProductoService productoService;
 
     @Override
@@ -135,8 +136,12 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         productoPrincipioActivoRepo.deletePrincipioActivo(idProducto);
 
         Producto productoEncontrado = productoRepo.findById(idProducto).orElse(null);
+        Vigencia vigenciaEncontrado = vigenciaRepo.findById(productoEncontrado.getVigencia().getIdVigencia()).orElse(null);
+        Laboratorio laboratorioEncontrado = laboratorioRepo.findById(productoEncontrado.getLaboratorio().getIdLaboratorio()).orElse(null);
 
         //falta vigencia y laboratorio
+        productoEncontrado.setVigencia(vigenciaEncontrado);
+        productoEncontrado.setLaboratorio(laboratorioEncontrado);
         productoEncontrado.setIdCodigo(producto.getIdCodigo());
         productoEncontrado.setNombre(producto.getNombre());
         productoEncontrado.setIndicacion(producto.getIndicacion());
@@ -161,7 +166,8 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         for(Presentacion presentacion : presentacionesActualizadas){
             if (presentacion.getIdPresentacion() == null) {
                 presentacion.setProducto(productoExistente);
-                productoExistente.getPresentaciones().add(presentacion);
+//                productoExistente.getPresentaciones().add(presentacion);
+                presentacionRepo.save(presentacion);
             }else{
                 Presentacion presentacionExistente = presentacionesExistentes.get(presentacion.getIdPresentacion());
                 presentacionExistente.setIdCodigo(presentacion.getIdCodigo());
@@ -171,6 +177,7 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
                 presentacionExistente.setPvp(presentacion.getPvp());
                 presentacionExistente.setModificaciones(presentacion.getModificaciones());
                 presentacionExistente.setEstado(presentacion.getEstado());
+                presentacionRepo.save(presentacionExistente);
             }
         }
 
@@ -183,5 +190,20 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
 
         );
 
+    }
+
+    @Transactional
+    @Override
+    public void deleteTransactional(Integer idProducto){
+        Producto productoDelete = productoRepo.findById(idProducto).orElse(null);
+        List<Presentacion> presentacionesDelete = productoDelete.getPresentaciones();
+
+        for(Presentacion presentacionDelete : presentacionesDelete){
+            if(presentacionDelete.getIdPresentacion() != null){
+                presentacionRepo.delete(presentacionDelete);
+            }
+        }
+        productoPrincipioActivoRepo.deletePrincipioActivo(idProducto);
+        productoRepo.deleteById(idProducto);
     }
 }

@@ -16,4 +16,6 @@ public interface IProductoService extends ICRUD<Producto, Integer> {
     Producto saveTransactional(Producto producto, List<PrincipioActivo> principio);
 
     Producto updateTransactional(Integer id, Producto producto, List<PrincipioActivo> principio);
+
+    void deleteTransactional(Integer id);
 }
