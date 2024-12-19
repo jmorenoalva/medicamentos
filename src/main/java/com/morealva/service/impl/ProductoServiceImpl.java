@@ -137,9 +137,8 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
 
         Producto productoEncontrado = productoRepo.findById(idProducto).orElse(null);
         Vigencia vigenciaEncontrado = vigenciaRepo.findById(productoEncontrado.getVigencia().getIdVigencia()).orElse(null);
-        Laboratorio laboratorioEncontrado = laboratorioRepo.findById(productoEncontrado.getLaboratorio().getIdLaboratorio()).orElse(null);
+        Laboratorio laboratorioEncontrado = laboratorioRepo.findById(producto.getLaboratorio().getIdLaboratorio()).orElse(null);
 
-        //falta vigencia y laboratorio
         productoEncontrado.setVigencia(vigenciaEncontrado);
         productoEncontrado.setLaboratorio(laboratorioEncontrado);
         productoEncontrado.setIdCodigo(producto.getIdCodigo());
@@ -153,8 +152,6 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
 
         productoRepo.save(productoEncontrado);
 
-
-
         principios.forEach(ex -> productoPrincipioActivoRepo.savePrincipioActivo(idProducto, ex.getIdPrincipio()));
         return producto;
     }
@@ -166,7 +163,6 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
         for(Presentacion presentacion : presentacionesActualizadas){
             if (presentacion.getIdPresentacion() == null) {
                 presentacion.setProducto(productoExistente);
-//                productoExistente.getPresentaciones().add(presentacion);
                 presentacionRepo.save(presentacion);
             }else{
                 Presentacion presentacionExistente = presentacionesExistentes.get(presentacion.getIdPresentacion());
@@ -180,16 +176,13 @@ public class ProductoServiceImpl extends CRUDImpl<Producto, Integer> implements 
                 presentacionRepo.save(presentacionExistente);
             }
         }
-
         productoExistente.getPresentaciones().removeIf( p ->
                 !presentacionesActualizadas.stream()
                         .map(Presentacion::getIdPresentacion)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toSet())
                         .contains(p.getIdPresentacion())
-
         );
-
     }
 
     @Transactional
